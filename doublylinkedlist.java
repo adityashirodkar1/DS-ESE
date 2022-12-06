@@ -67,8 +67,43 @@ class DLinkedList{
         }       
     }
 
-    void displayDList(){
-        MyNode ptr = head;
+    MyNode sortedInsert(MyNode head,MyNode newnode){
+        if(head==null){
+            head = newnode;
+        }
+        else if(head.data>=newnode.data){
+            newnode.next = head;
+            head.previous= newnode;
+            head = newnode;
+        }
+        else{
+            MyNode ptr = head;
+            while(ptr.next!=null && ptr.next.data<newnode.data){
+                ptr = ptr.next;
+            }
+            newnode.next = ptr.next;
+            newnode.previous = ptr;          
+            if(ptr.next!=null){
+                ptr.next.previous = newnode;
+            }
+            ptr.next = newnode;
+        }
+        return head;
+    }
+
+    MyNode insertionSort(MyNode head){
+        MyNode sorted = null;
+        while(head!=null){
+            MyNode next = head.next;
+            head.next = head.previous = null;
+            sorted = sortedInsert(sorted, head);
+            head = next;
+        }
+        return sorted;
+    }
+
+    void displayDList(MyNode h){
+        MyNode ptr = h;
         while(ptr!=null){
             System.out.print(ptr.data+" ");
             ptr = ptr.next;
@@ -91,14 +126,14 @@ public class doublylinkedlist {
                     int data = sc.nextInt();
                     list.insertAtEnd(data);
                     System.out.print("List: ");
-                    list.displayDList();
+                    list.displayDList(list.head);
                     break;
                 case 2:
                     System.out.println("Enter the data:");
                     data = sc.nextInt();
                     list.insertAtFront(data);
                     System.out.print("List: ");
-                    list.displayDList();
+                    list.displayDList(list.head);
                     break;
                 case 3:
                     System.out.println("Enter the data:");
@@ -107,9 +142,14 @@ public class doublylinkedlist {
                     int post = sc.nextInt();
                     list.insertAtPost(data, post);
                     System.out.print("List: ");
-                    list.displayDList();
+                    list.displayDList(list.head);
                     break;
                 case 4:
+                    System.out.print("Original List: ");
+                    list.displayDList(list.head);
+                    MyNode sorted = list.insertionSort(list.head);
+                    System.out.print("Sorted List: ");
+                    list.displayDList(sorted);
                     break;
                 case 5:
                     break;
